@@ -1,19 +1,3 @@
-// declare variables
-let mapOptions = {'center': [34.0709,-118.444],'zoom':9}
-
-// use the variables
-const map = L.map('the_map').setView(mapOptions.center, mapOptions.zoom);
-
-let CartoDB_Positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-	subdomains: 'abcd',
-	maxZoom: 20
-});
-
-CartoDB_Positron.addTo(map)
-
-
-
 let breakfast = L.featureGroup();
 let drink = L.featureGroup();
 let dessert = L.featureGroup();
@@ -28,8 +12,25 @@ let layers = {
     "meal": meal
 }
 
+
+// declare variables
+let mapOptions = {'center': [37.0709,-100],'zoom':4}
+
+// use the variables
+const map = L.map('the_map', {layers: [meal, breakfast, drink, dessert, bakery]}).setView(mapOptions.center, mapOptions.zoom);
+
+
+let CartoDB_Positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	subdomains: 'abcd',
+	maxZoom: 20
+});
+
+CartoDB_Positron.addTo(map)
+
+
 // add layer control box
-L.control.layers(null,layers).addTo(map)
+L.control.layers(null,layers,{collapsed:false, position: 'bottomleft'}).addTo(map)
 
 let circleOptions = {
     radius: 4,
@@ -44,26 +45,56 @@ let circleOptions = {
 function addMarker(data){
     if(data["category"] == "breakfast"){
         circleOptions.fillColor = "blue"
-        breakfast.addLayer(L.circleMarker([data.lat,data.lng], circleOptions).bindPopup(`<h2>${data["What was your favorite artist you've seen live?"]}</h2> 
-        <h3>${data['What venue did you see them at?']}</h3>${data['Please put the Spotify embed URL of your favorite song of theirs!']}`))
-        createButtons(data.lat,data.lng,data["place name"], data['address'])
+        breakfast.addLayer(L.circleMarker([data.lat,data.lng], circleOptions).bindPopup(`<h2>${data["place name"]}</h2> 
+        <h3>${data['address']} 
+        <br> ${data['dishes ordered']}
+        <br> $${data['price']}
+        <br> ${data['rate']}/5
+        <br> ${data['overall review in words']}
+        </h3>`))
     }
-    else if(ata["category"] == "meal"){
+    else if(data["category"] == "meal"){
         circleOptions.fillColor = "green"
         meal.addLayer(L.circleMarker([data.lat,data.lng], circleOptions).bindPopup(`<h2>${data["place name"]}</h2> 
         <h3>${data['address']} 
         <br> ${data['dishes ordered']}
         <br> $${data['price']}
-        <br> $${data['rate']}/5
-        <br> $${data['overall review in words']}/5
+        <br> ${data['rate']}/5
+        <br> ${data['overall review in words']}
         </h3>`))
-        createButtons(data.lat,data.lng,data["place name"], data['address'])
+    }
+    else if(data["category"] == "drink"){
+        circleOptions.fillColor = "yellow"
+        drink.addLayer(L.circleMarker([data.lat,data.lng], circleOptions).bindPopup(`<h2>${data["place name"]}</h2> 
+        <h3>${data['address']} 
+        <br> ${data['dishes ordered']}
+        <br> $${data['price']}
+        <br> ${data['rate']}/5
+        <br> ${data['overall review in words']}
+        </h3>`))
+    }
+    else if(data["category"] == "dessert"){
+        circleOptions.fillColor = "red"
+        dessert.addLayer(L.circleMarker([data.lat,data.lng], circleOptions).bindPopup(`<h2>${data["place name"]}</h2> 
+        <h3>${data['address']} 
+        <br> ${data['dishes ordered']}
+        <br> $${data['price']}
+        <br> ${data['rate']}/5
+        <br> ${data['overall review in words']}
+        </h3>`))
     }
     else{
-        circleOptions.fillColor = "red"
-        noConcert.addLayer(L.circleMarker([0,0],circleOptions).bindPopup('<h2> Have never been to a live conert </h2>'))
-        createButtons(0,0, "Have never been to a live concert", "")
+        circleOptions.fillColor = "purple"
+        drink.addLayer(L.circleMarker([data.lat,data.lng], circleOptions).bindPopup(`<h2>${data["place name"]}</h2> 
+        <h3>${data['address']} 
+        <br> ${data['dishes ordered']}
+        <br> $${data['price']}
+        <br> ${data['rate']}/5
+        <br> ${data['overall review in words']}
+        </h3>`))
     }
+
+    // createButtons(data.lat,data.lng,data["place name"], data['address'])
 }
 
 function createButtons(lat,lng,name, loc){
@@ -95,9 +126,9 @@ function processData(results){
         addMarker(data)
         //console.log(data)
     })
-    concert.addTo(map)
-    noConcert.addTo(map)
-    let allLayers = L.featureGroup([concert,noConcert]);
+    // meal.addTo(map)
+    // noConcert.addTo(map)
+    // let allLayers = L.featureGroup([meal,noConcert]);
     map.fitBounds(allLayers.getBounds());
 }
 
