@@ -2,7 +2,7 @@ body{
     display: grid;
     grid-auto-rows: 50px auto auto;
     grid-template-areas: "header" "main_content" "footer";
-    background-color: rgb(247, 242, 230);
+    background-color: #fcf6fb;
     gap: 10px;
 }
 
@@ -21,8 +21,10 @@ header{
 
 .main{
     grid-area: main_content;
-    grid-template-columns: 1fr;
-    grid-template-areas: "main_map";
+    grid-template-columns: 1fr 4fr 1fr;
+    grid-template-rows: 100px;
+    grid-template-areas: ". buttonHome. " 
+    "main_map main_map main_map";
     display: grid;
 }
 
@@ -51,11 +53,11 @@ header{
     height: 80vh;
 }
 
-/* #placeForButtons{
+#placeForButtons{
     grid-area: buttonHome;
     display:grid;
-    grid-template-columns: repeat(2, 1fr);
-} */
+    grid-template-columns: repeat(5, 1fr);
+}
 
 .leaflet-popup-content {
     width: 400px;
@@ -72,7 +74,7 @@ h3{
 
 button{
     font-family: "Comic Sans MS", "Comic Sans", cursive;
-    background-color:rgb(239, 211, 176);
+    background-color: #dee2ff;
 }
 
 /* Add a black background color to the top navigation */
@@ -105,7 +107,7 @@ button{
 
   /* Dropdown Button */
 .dropbtn {
-    background-color: #04AA6D;
+    background-color: #cbc0d3;  
     color: white;
     padding: 16px;
     /* font-size: 16px; */
@@ -148,4 +150,4 @@ button{
   .dropdown:hover .dropdown-content {display: block;}
   
   /* Change the background color of the dropdown button when the dropdown content is shown */
-  .dropdown:hover .dropbtn {background-color: #3e8e41;}
+  .dropdown:hover .dropbtn {background-color: #8e9aaf;}

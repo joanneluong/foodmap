@@ -111,7 +111,22 @@ function createButtons(lat,lng,name, loc){
     spaceForButtons.appendChild(newButton);//this adds the button to our page.
 }
 
+function addLoc(data){
+    const newButton = document.createElement("button"); // adds a new button
+    newButton.id = "button"+data.location; // gives the button a unique id
+    newButton.innerHTML =  data.location; // gives the button a title
+    newButton.setAttribute("lat", data.lat);
+    newButton.setAttribute("lng", data.lng);
+    newButton.addEventListener('click', function(){
+        const zoom = 9;
+        map.flyTo([data.lat,data.lng],zoom); //this is the flyTo from Leaflet
+    })
+    const spaceForButtons = document.getElementById('placeForButtons')
+    spaceForButtons.appendChild(newButton);//this adds the button to our page.
+}   
+
 const dataURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTh9rD7gjHeIAr7dEFVku9qsY75BlqEZKrxd3ePoNBeCJz88GdAVt5FVaqUc-EYIXDNhB7_Pb-wID_w/pub?output=csv"
+const locURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQWD7ENTmcN89JLchmGrqIJ-vQb_QXHZpYR8dp264mc-EGzBt_RRepXTCRyqsVeXNjpZwBYApDfcAMf/pub?output=csv"
 
 function loadData(url){
     Papa.parse(url, {
@@ -121,16 +136,30 @@ function loadData(url){
     })
 }
 
+function loadLoc(url){
+    Papa.parse(url, {
+        header: true,
+        download: true,
+        complete: results => processLoc(results)
+    })
+}
+
 function processData(results){
     results.data.forEach(data => {
         addMarker(data)
-        //console.log(data)
+        // console.log(data)
     })
     // meal.addTo(map)
     // noConcert.addTo(map)
     // let allLayers = L.featureGroup([meal,noConcert]);
-    map.fitBounds(allLayers.getBounds());
+    // map.fitBounds(allLayers.getBounds());
 }
 
+function processLoc(results){
+    results.data.forEach(data => {
+        addLoc(data)
+    })
+}
 
+loadLoc(locURL)
 loadData(dataURL)
